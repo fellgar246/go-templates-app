@@ -1,4 +1,4 @@
-module bookings-udemy
+module github.com/fellgar246/go-templates-app
 
 go 1.15
 

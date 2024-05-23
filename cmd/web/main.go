@@ -1,16 +1,18 @@
 package main
 
 import (
-	"bookings-udemy/pkg/config"
-	"bookings-udemy/pkg/handlers"
-	"bookings-udemy/pkg/render"
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/fellgar246/go-templates-app/pkg/config"
+	"github.com/fellgar246/go-templates-app/pkg/handlers"
+	"github.com/fellgar246/go-templates-app/pkg/render"
 )
 
 const portNumber = ":8080"
 
+// go run cmd/web/*.go
 // main is the main function
 func main() {
 	var app config.AppConfig
@@ -28,9 +30,13 @@ func main() {
 
 	render.NewTemplates(&app)
 
-	http.HandleFunc("/", handlers.Repo.Home)
-	http.HandleFunc("/about", handlers.Repo.About)
-
 	fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
-	_ = http.ListenAndServe(portNumber, nil)
+
+	srv := &http.Server{
+		Addr:    portNumber,
+		Handler: routes(&app),
+	}
+
+	err = srv.ListenAndServe()
+	log.Fatal(err)
 }
